@@ -44,8 +44,8 @@ public class ResultsController {
             green = (int)Math.round(255 + t * (128 - 255));
             blue = 0;
         }
-        // increase alpha to make colors more visible
-        return toRgba(red, green, blue, 0.28);
+        // increase alpha to make colors more visible in the browser
+        return toRgba(red, green, blue, 0.50);
     }
 
     private String toRgba(int r, int g, int b, double a) {
@@ -113,16 +113,12 @@ public class ResultsController {
                 for (Option o : q.getOptions()) {
                     int v = m.getOrDefault(o.getId(), 0);
                     String color;
-                    // If this option has the maximum count, mark it green (also covers ties)
-                    if (v == max && max > 0) {
-                        color = toRgba(0,128,0,0.28);
-                    } else if (v == min && max != min) {
-                        // least chosen -> light red
-                        color = toRgba(255,120,120,0.24);
-                    } else if (max == min) {
-                        // all equal (including zero) -> neutral subtle background
-                        color = toRgba(200,200,200,0.10);
+                    // If all options have the same count (tie) -> show neutral yellow
+                    if (max == min) {
+                        // when all options tie, show a visible yellow
+                        color = toRgba(253,231,14,0.50);
                     } else {
+                        // map value to ratio in [0,1] where 0 -> least (red), 1 -> most (green)
                         double ratio = (double)(v - min) / (double)(max - min);
                         color = colorForRatio(ratio);
                     }

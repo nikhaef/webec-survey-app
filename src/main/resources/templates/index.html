@@ -19,7 +19,7 @@
                 <a th:href="@{/register}">Registrieren</a>
             </span>
             <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
-                <a class="btn wide" th:href="@{/coordinator/create}">Umfrage erstellen</a>
+                <a class="btn" th:href="@{/coordinator/create}">Umfrage erstellen</a>
             </span>
             <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
                 <a class="btn" th:href="@{/coordinator/results}">Resultate</a>
