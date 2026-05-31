@@ -27,7 +27,7 @@ Das Projekt demonstriert **Authentifizierung und Autorisierung mit rollenbasiert
 - **Maven** als Build-Tool
 - **JUnit 5** für Unit-Tests
 - **Mockito** für Test-Mocking
-- **Playwright** für E2E-Tests
+- **Playwright** für E2E-Tests (für E2E-Tests muss der Browser mit localhost:8081 erreichbar sein)
 - **Spring Boot Test** für Integrationstests
 
 ### Deployment

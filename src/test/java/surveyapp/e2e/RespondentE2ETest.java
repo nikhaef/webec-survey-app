@@ -1,6 +1,7 @@
 package surveyapp.e2e;
 
 import com.microsoft.playwright.*;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class RespondentE2ETest {
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
     }
 
-    @BeforeAll
+    @AfterAll
     static void teardownBrowser() {
         if (browser != null) browser.close();
         if (playwright != null) playwright.close();
