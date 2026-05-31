@@ -44,8 +44,8 @@ public class ResultsController {
             green = (int)Math.round(255 + t * (128 - 255));
             blue = 0;
         }
-        // increase alpha to make colors more visible in the browser
-        return toRgba(red, green, blue, 0.50);
+        // keep highlights subtle so option colors are visible but not too strong
+        return toRgba(red, green, blue, 0.22);
     }
 
     private String toRgba(int r, int g, int b, double a) {
@@ -115,8 +115,8 @@ public class ResultsController {
                     String color;
                     // If all options have the same count (tie) -> show neutral yellow
                     if (max == min) {
-                        // when all options tie, show a visible yellow
-                        color = toRgba(253,231,14,0.50);
+                        // when all options tie, show the same subtle opacity
+                        color = toRgba(253,231,14,0.22);
                     } else {
                         // map value to ratio in [0,1] where 0 -> least (red), 1 -> most (green)
                         double ratio = (double)(v - min) / (double)(max - min);
