@@ -230,39 +230,6 @@ answer             → Einzelne Antwort pro Frage
 - User: `SA`
 - Passwort: (leer)
 
----
-
-## 🧪 Tests
-
-### Unit-Tests (6+ Tests)
-- `UserRepositoryTest` - Benutzer-Lookup, Eindeutigkeit, Rollen-Persistierung
-- `SurveyRepositoryTest` - Open/Closed Surveys, Titel-Persistierung
-- `ResultsControllerColorTest` - Gradient-Logik (rot → gelb → grün), RGBA-Berechnung
-
-### Integrationstests (2+ Tests)
-- `AuthenticationIntegrationTest` - Register, Login, Logout, Duplikat-Usernamen
-- `SurveyFlowIntegrationTest` - Kompletter Survey-Flow, Auth-Schutz
-
-### E2E-Tests (2+ Tests mit Page Objects)
-- `CoordinatorE2ETest` - Coordinator erstellt, öffnet Umfrage
-- `RespondentE2ETest` - Respondent registriert, loggt ein, Fehler bei falshem Passwort
-
-**Page Objects:**
-- `HomePage` - Navigations-Seite
-- `LoginPage` - Login-Formular
-- `SurveyPage` - Umfrage-Erstellung und -Durchführung
-
-### Tests ausführen
-```bash
-# Alle Tests
-mvn test
-
-# Nur Unit-Tests
-mvn test -Dtest=*Test
-
-# Nur E2E-Tests (erfordert laufende App)
-mvn test -Dtest=*E2ETest
-```
 
 ---
 
@@ -285,7 +252,7 @@ mvn test -Dtest=*E2ETest
 
 ### JavaScript
 - `create_survey.html` - Dynamische Frage/Option-Verwaltung (add/remove)
-- Minimal, selbstgeschrieben, keine externe Libs
+- keine externe Libs
 
 ---
 
@@ -295,14 +262,6 @@ mvn test -Dtest=*E2ETest
 ```bash
 mvn clean package -DskipTests
 java -jar target/survey-app-0.0.1-SNAPSHOT.jar
-```
-
-### Docker (optional)
-Ein `Dockerfile` kann hinzugefügt werden:
-```dockerfile
-FROM openjdk:17-jdk-slim
-COPY target/survey-app-*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 
 ---
@@ -343,23 +302,4 @@ Webec-Survey-App/
 
 ---
 
-## 💡 Zusatz-Features
-
-- **Farbgradient für Ergebnisse:** Intelligente RGBA-Berechnung (rot → gelb → grün)
-- **Duplikat-Schutz:** Respondents können Umfrage nur 1x beantworten
-- **Dynamische UI:** JavaScript für Add/Remove von Fragen und Optionen
-- **Session-Management:** Automatisches Login/Logout
-- **Validierung:** Server- und Client-seitige Validierung (HTML `required`)
-
----
-
-## 📞 Support & Kontakt
-
-Für Fragen oder Bugmeldungen bitte ein Issue erstellen oder den Projektinhaber kontaktieren.
-
----
-
-**Version:** 0.0.1-SNAPSHOT  
-**Datum:** 31.05.2026  
-**Status:** Beta (vollständige Funktionalität, aber weitere Tests empfohlen)
 
