@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Ergebnisse</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${survey.title}"></h1>
+    <p>Antworten gesamt: <span th:text="${responsesCount}"></span></p>
+    <div th:each="q : ${survey.questions}">
+        <h3 th:text="${q.text}"></h3>
+        <table>
+            <thead><tr><th>Option</th><th>Anzahl</th></tr></thead>
+            <tbody>
+            <tr th:each="opt : ${q.options}">
+                <td th:text="${opt.text}"></td>
+                <td th:text="${#numbers.formatInteger(${counts[q.id][opt.id]},0)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a class="btn" href="/">Zurück</a></p>
+</div>
+</body>
+</html>
+

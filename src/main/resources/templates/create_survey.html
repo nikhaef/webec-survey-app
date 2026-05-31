@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Neue Umfrage</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <script>
+        let qCount = 0;
+        function addQuestion() {
+            if (qCount >= 10) return alert('Maximal 10 Fragen');
+            const container = document.getElementById('questions');
+            const div = document.createElement('div');
+            div.className = 'question';
+            div.id = 'q' + qCount;
+            div.innerHTML = `
+                <label>Frage ${qCount+1}</label>
+                <input type="text" name="q${qCount}text" />
+                <div id="q${qCount}opts">
+                    <input type="text" name="q${qCount}opt0" placeholder="Option 1" />
+                    <input type="text" name="q${qCount}opt1" placeholder="Option 2" />
+                </div>
+                <button type="button" onclick="addOption(${qCount})">Option hinzufügen</button>
+            `;
+            container.appendChild(div);
+            qCount++;
+        }
+        function addOption(qi) {
+            const opts = document.getElementById('q' + qi + 'opts');
+            const current = opts.querySelectorAll('input').length;
+            if (current >= 5) return alert('Maximal 5 Optionen');
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.name = `q${qi}opt${current}`;
+            inp.placeholder = 'Option ' + (current+1);
+            opts.appendChild(inp);
+        }
+        window.onload = function() { addQuestion(); }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Neue Umfrage definieren</h1>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <form method="post" action="/coordinator/save">
+        <label>Titel</label>
+        <input type="text" name="title" />
+        <div id="questions"></div>
+        <p>
+            <button type="button" class="btn" onclick="addQuestion()">Frage hinzufügen</button>
+        </p>
+        <p>
+            <button class="btn" type="submit">Save</button>
+            <a class="btn secondary" href="/">Cancel</a>
+        </p>
+    </form>
+</div>
+</body>
+</html>
+

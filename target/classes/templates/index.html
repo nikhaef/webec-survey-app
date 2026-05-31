@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Survey App</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Survey App</h1>
+        <div class="nav">
+            <span th:if="${currentUser != null}">
+                Hallo <strong th:text="${currentUser.username}"></strong>
+                <a th:href="@{/logout}">Logout</a>
+            </span>
+            <span th:if="${currentUser == null}">
+                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/register}">Registrieren</a>
+            </span>
+            <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
+                <a class="btn" th:href="@{/coordinator/create}">Neue Umfrage</a>
+            </span>
+        </div>
+    </div>
+
+    <h2>Offene Umfragen</h2>
+    <div class="survey-list">
+        <div class="survey-card" th:each="s : ${openSurveys}">
+            <h3 th:text="${s.title}"></h3>
+            <p th:text="${#lists.size(s.questions)} + ' Fragen'"></p>
+            <a th:href="@{'/survey/' + ${s.id} + '/take'}" class="btn">Teilnehmen</a>
+            <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
+                <a th:href="@{'/coordinator/close/' + ${s.id}}" class="btn secondary">Schließen</a>
+            </span>
+        </div>
+    </div>
+
+    <h2>Geschlossene Umfragen</h2>
+    <div class="survey-list">
+        <div class="survey-card" th:each="s : ${closedSurveys}">
+            <h3 th:text="${s.title}"></h3>
+            <p th:text="${#lists.size(s.questions)} + ' Fragen'"></p>
+            <a th:href="@{'/survey/' + ${s.id} + '/results'}" class="btn">Ergebnisse</a>
+            <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
+                <a th:href="@{'/coordinator/open/' + ${s.id}}" class="btn">Öffnen</a>
+            </span>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+
