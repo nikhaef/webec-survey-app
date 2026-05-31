@@ -19,7 +19,7 @@
             </colgroup>
             <thead><tr><th>Option</th><th style="text-align:center">Anzahl</th></tr></thead>
             <tbody>
-            <tr th:each="opt : ${q.options}" th:style="${bgMap[q.id][opt.id] != null} ? 'background-color:' + ${bgMap[q.id][opt.id]} : ''">
+            <tr th:each="opt : ${q.options}" th:style="${bgMap[q.id][opt.id] != null} ? 'background-color:' + bgMap[q.id][opt.id] : ''">
                 <td th:text="${opt.text}"></td>
                 <td style="text-align:center" th:text="${counts[q.id][opt.id] != null ? counts[q.id][opt.id] : 0}"></td>
             </tr>

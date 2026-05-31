@@ -10,6 +10,7 @@ import surveyapp.model.User;
 import surveyapp.model.UserRole;
 import surveyapp.repository.UserRepository;
 import surveyapp.repository.SurveyRepository;
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
