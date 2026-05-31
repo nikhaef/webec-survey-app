@@ -14,6 +14,8 @@
         <input type="text" name="username" required />
         <label>Passwort</label>
         <input type="password" name="password" required />
+        <label><input type="checkbox" name="coordinator" value="true" /> Als Koordinator registrieren</label>
+        <p style="font-size:0.9em;color:#555">Hinweis: Ein Koordinator hat administrative Rechte (Umfragen erstellen/öffnen/schließen).</p>
         <button class="btn" type="submit">Registrieren</button>
     </form>
     <p>Oder <a th:href="@{/login}">einloggen</a></p>

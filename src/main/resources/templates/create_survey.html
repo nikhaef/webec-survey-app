@@ -4,35 +4,72 @@
     <meta charset="UTF-8" />
     <title>Neue Umfrage</title>
     <link rel="stylesheet" th:href="@{/styles.css}" />
+    <style>
+        .question-block { border: 1px solid #ddd; padding: 12px; margin: 10px 0; border-radius: 4px; background: #fafbff; position: relative; }
+        .question-block .remove-btn { position: absolute; top: 10px; right: 10px; padding: 4px 8px; font-size: 0.85em; background: #d9534f; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .question-block .remove-btn:hover { background: #c9302c; }
+        .question-label { font-weight: bold; margin-bottom: 6px; }
+        .options-container { margin: 10px 0; padding: 8px; background: white; border-radius: 3px; }
+        .option-row { display: flex; gap: 8px; margin: 6px 0; align-items: center; }
+        .option-input { flex: 1; padding: 8px; box-sizing: border-box; }
+        .remove-option-btn { padding: 4px 8px; font-size: 0.85em; background: #d9534f; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .remove-option-btn:hover { background: #c9302c; }
+    </style>
     <script>
         let qCount = 0;
         function addQuestion() {
             if (qCount >= 10) return alert('Maximal 10 Fragen');
             const container = document.getElementById('questions');
             const div = document.createElement('div');
-            div.className = 'question';
+            div.className = 'question-block';
             div.id = 'q' + qCount;
             div.innerHTML = `
-                <label>Frage ${qCount+1}</label>
-                <input type="text" name="q${qCount}text" />
-                <div id="q${qCount}opts">
-                    <input type="text" name="q${qCount}opt0" placeholder="Option 1" />
-                    <input type="text" name="q${qCount}opt1" placeholder="Option 2" />
+                <button type="button" class="remove-btn" onclick="removeQuestion(${qCount})">✕ Löschen</button>
+                <div class="question-label">Frage ${qCount+1}</div>
+                <input type="text" name="q${qCount}text" placeholder="Frage eingeben..." />
+                <div id="q${qCount}opts" class="options-container">
+                    <div style="font-size:0.9em;color:#666;margin-bottom:6px">Antwortmöglichkeiten:</div>
+                    <div class="option-row">
+                        <input type="text" class="option-input" name="q${qCount}opt0" placeholder="Option 1" />
+                        <button type="button" class="remove-option-btn" onclick="removeOption(this)">✕</button>
+                    </div>
+                    <div class="option-row">
+                        <input type="text" class="option-input" name="q${qCount}opt1" placeholder="Option 2" />
+                        <button type="button" class="remove-option-btn" onclick="removeOption(this)">✕</button>
+                    </div>
                 </div>
-                <button type="button" onclick="addOption(${qCount})">Option hinzufügen</button>
+                <button type="button" class="btn" onclick="addOption(${qCount})">+ Option hinzufügen</button>
             `;
             container.appendChild(div);
             qCount++;
         }
         function addOption(qi) {
             const opts = document.getElementById('q' + qi + 'opts');
-            const current = opts.querySelectorAll('input').length;
-            if (current >= 5) return alert('Maximal 5 Optionen');
+            // Count only option-row divs (skip the label)
+            const rows = opts.querySelectorAll('.option-row');
+            if (rows.length >= 5) return alert('Maximal 5 Optionen pro Frage');
+            const row = document.createElement('div');
+            row.className = 'option-row';
             const inp = document.createElement('input');
             inp.type = 'text';
-            inp.name = `q${qi}opt${current}`;
-            inp.placeholder = 'Option ' + (current+1);
-            opts.appendChild(inp);
+            inp.className = 'option-input';
+            inp.name = `q${qi}opt${rows.length}`;
+            inp.placeholder = 'Option ' + (rows.length + 1);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'remove-option-btn';
+            btn.textContent = '✕';
+            btn.onclick = function() { removeOption(this); };
+            row.appendChild(inp);
+            row.appendChild(btn);
+            opts.appendChild(row);
+        }
+        function removeOption(btn) {
+            btn.parentElement.remove();
+        }
+        function removeQuestion(qi) {
+            const qDiv = document.getElementById('q' + qi);
+            if (qDiv) qDiv.remove();
         }
         window.onload = function() { addQuestion(); }
     </script>
@@ -46,11 +83,11 @@
         <input type="text" name="title" />
         <div id="questions"></div>
         <p>
-            <button type="button" class="btn" onclick="addQuestion()">Frage hinzufügen</button>
+            <button type="button" class="btn" onclick="addQuestion()">+ Frage hinzufügen</button>
         </p>
         <p>
-            <button class="btn" type="submit">Save</button>
-            <a class="btn secondary" href="/">Cancel</a>
+            <button class="btn" type="submit">Speichern</button>
+            <a class="btn secondary" href="/">Abbrechen</a>
         </p>
     </form>
 </div>

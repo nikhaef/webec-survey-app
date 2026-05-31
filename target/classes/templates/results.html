@@ -8,15 +8,20 @@
 <body>
 <div class="container">
     <h1 th:text="${survey.title}"></h1>
-    <p>Antworten gesamt: <span th:text="${responsesCount}"></span></p>
+    <p>Antworten gesamt: <strong th:text="${responsesCount}"></strong></p>
+    <div th:if="${responsesCount == 0}" class="error">Noch keine Antworten eingegangen.</div>
     <div th:each="q : ${survey.questions}">
         <h3 th:text="${q.text}"></h3>
         <table>
-            <thead><tr><th>Option</th><th>Anzahl</th></tr></thead>
+            <colgroup>
+                <col style="width:70%" />
+                <col style="width:30%" />
+            </colgroup>
+            <thead><tr><th>Option</th><th style="text-align:center">Anzahl</th></tr></thead>
             <tbody>
-            <tr th:each="opt : ${q.options}">
+            <tr th:each="opt : ${q.options}" th:style="${bgMap[q.id][opt.id] != null} ? 'background-color:' + ${bgMap[q.id][opt.id]} : ''">
                 <td th:text="${opt.text}"></td>
-                <td th:text="${#numbers.formatInteger(${counts[q.id][opt.id]},0)}"></td>
+                <td style="text-align:center" th:text="${counts[q.id][opt.id] != null ? counts[q.id][opt.id] : 0}"></td>
             </tr>
             </tbody>
         </table>
@@ -25,4 +30,3 @@
 </div>
 </body>
 </html>
-

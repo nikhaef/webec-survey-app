@@ -15,18 +15,17 @@
                 <p><strong th:text="${q.text}"></strong></p>
                 <div th:each="opt : ${q.options}">
                     <label>
-                        <input type="radio" th:name="${'q' + q.id}" th:value="${opt.id}" />
+                        <input type="radio" th:name="${'q' + q.id}" th:value="${opt.id}" required />
                         <span th:text="${opt.text}"></span>
                     </label>
                 </div>
             </div>
         </div>
         <p>
-            <button class="btn" type="submit">Submit</button>
-            <a class="btn secondary" href="/">Cancel</a>
+            <button class="btn" type="submit">Absenden</button>
+            <a class="btn secondary" href="/">Abbrechen</a>
         </p>
     </form>
 </div>
 </body>
 </html>
-
