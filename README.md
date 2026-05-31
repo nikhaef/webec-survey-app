@@ -31,7 +31,9 @@ Das Projekt demonstriert **Authentifizierung und Autorisierung mit rollenbasiert
 - **Spring Boot Test** für Integrationstests
 
 ### Deployment
-- **JVM (Embedded Tomcat)** - läuft auf Port 8081
+- **JVM (Embedded Tomcat)** - läuft standardmäßig auf Port 8081 (siehe `src/main/resources/application.properties`)
+
+Hinweis: Beim ersten Start legt die Anwendung eine H2-Datei im Ordner `./data/` an. Es existiert außerdem eine kleine Convenience-Seeding-Logik, die beim Start einen Benutzer `coordinator` mit Passwort `password` anlegt (nur Demo/Zwecke).
 
 ---
 
@@ -42,21 +44,34 @@ Das Projekt demonstriert **Authentifizierung und Autorisierung mit rollenbasiert
 - Maven 3.6+
 
 ### Schritt 1: Projekt klonen/öffnen
-```bash
-cd /Users/nikla/IdeaProjects/Webec-Survey-App
+Wechsle in das Projektverzeichnis. Beispiel (Windows PowerShell):
+
+```powershell
+# Ersetze <path-to-project-root> durch den Pfad zu deinem Projekt-Ordner
+Set-Location '<path-to-project-root>'
 ```
 
 ### Schritt 2: Dependencies herunterladen & Projekt bauen
-```bash
+Mit dem Maven Wrapper (falls vorhanden) oder lokalem Maven:
+
+```powershell
+# Mit Maven Wrapper
+.\mvnw.cmd clean install -DskipTests
+# Oder mit lokalem Maven
 mvn clean install -DskipTests
 ```
 
 ### Schritt 3: Anwendung starten
-```bash
+
+```powershell
+# Mit Maven Wrapper
+.\mvnw.cmd -DskipTests spring-boot:run
+# Oder mit lokalem Maven
 mvn -DskipTests spring-boot:run
 ```
 
 ### Schritt 4: Browser öffnen
+
 ```
 http://localhost:8081
 ```
@@ -203,9 +218,9 @@ public String submit(@PathVariable Long id, HttpServletRequest req,
 ### 📊 Ergebnisanzeige (Coordinator & Respondent)
 - Tabellarische Anzeige aller Ergebnisse
 - Farbcodierung:
-  - **Hellgrün:** Meistgewählte Option(en) (auch bei gleichstand)
+  - **Hellgrün:** Meistgewählte Option(en)
   - **Rot → Gelb → Grün:** Gradient zwischen wenigsten und meisten
-  - **Neutral grau:** Alle Optionen gleich gewählt oder keine Stimmen
+  - **Farb-Opazität:** Die Hintergründe werden als dezente RGBA-Farben ausgegeben (leicht durchsichtig, alpha ≈ 0.22), damit die Hervorhebungen nicht zu markant sind
 - Konsistente Tabellenbreiten (70% / 30%)
 - Gesamtzahl der Antworten angezeigt
 
@@ -229,6 +244,17 @@ answer             → Einzelne Antwort pro Frage
 - JDBC URL: `jdbc:h2:./data/surveydb`
 - User: `SA`
 - Passwort: (leer)
+
+DB-Reset / Daten löschen
+Wenn du alle persistierten Daten (Users, Surveys, Responses etc.) löschen möchtest, kannst du die H2-Dateien im `data/`-Ordner entfernen oder die Tabellen über die H2-Konsole leeren. Beispiel (PowerShell):
+
+```powershell
+# Beispiel: relative Pfade aus dem Projektroot
+Remove-Item ".\data\surveydb.mv.db" -Force -ErrorAction SilentlyContinue
+Remove-Item ".\data\surveydb.trace.db" -Force -ErrorAction SilentlyContinue
+```
+
+Die Anwendung erzeugt beim nächsten Start automatisch eine frische DB-Datei.
 
 
 ---
@@ -263,6 +289,8 @@ answer             → Einzelne Antwort pro Frage
 mvn clean package -DskipTests
 java -jar target/survey-app-0.0.1-SNAPSHOT.jar
 ```
+
+Hinweis: Es ist eine `.gitignore` im Projektstamm vorhanden, die `target/` und die H2-DB-Dateien (`data/surveydb.*`) ausschließt. Falls diese Artefakte bereits ins Git geratet sind, entferne sie mit `git rm --cached <path>` aus dem Index, ohne die lokalen Dateien zu löschen.
 
 ---
 

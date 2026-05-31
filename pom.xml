@@ -61,7 +61,6 @@
             <version>1.40.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- lombok removed to avoid javac-internal issues during runtime/build -->
     </dependencies>
     <build>
         <plugins>
