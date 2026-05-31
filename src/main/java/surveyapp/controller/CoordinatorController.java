@@ -22,6 +22,13 @@ public class CoordinatorController {
         this.surveyRepository = surveyRepository;
     }
 
+    @GetMapping("/coordinator/results")
+    public String resultsList(Model model) {
+        // show closed surveys (results available)
+        model.addAttribute("closedSurveys", surveyRepository.findByOpenFalse());
+        return "coordinator_results";
+    }
+
     @GetMapping("/coordinator/create")
     public String createForm() {
         return "create_survey";

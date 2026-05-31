@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import surveyapp.model.*;
+import surveyapp.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import surveyapp.repository.ResponseRepository;
 import surveyapp.repository.SurveyRepository;
 
@@ -19,10 +21,12 @@ public class ResultsController {
 
     private final SurveyRepository surveyRepository;
     private final ResponseRepository responseRepository;
+    private final UserRepository userRepository;
 
-    public ResultsController(SurveyRepository surveyRepository, ResponseRepository responseRepository) {
+    public ResultsController(SurveyRepository surveyRepository, ResponseRepository responseRepository, UserRepository userRepository) {
         this.surveyRepository = surveyRepository;
         this.responseRepository = responseRepository;
+        this.userRepository = userRepository;
     }
 
     // Map ratio in [0,1] to a color between red(255,0,0) -> yellow(255,255,0) -> green(0,128,0)
@@ -40,7 +44,8 @@ public class ResultsController {
             green = (int)Math.round(255 + t * (128 - 255));
             blue = 0;
         }
-        return toRgba(red, green, blue, 0.15);
+        // increase alpha to make colors more visible
+        return toRgba(red, green, blue, 0.28);
     }
 
     private String toRgba(int r, int g, int b, double a) {
@@ -53,12 +58,22 @@ public class ResultsController {
 
     @GetMapping("/survey/{id}/results")
     @Transactional(readOnly = true)
-    public String results(@PathVariable Long id, Model model) {
+    public String results(@PathVariable Long id, Model model, HttpSession session) {
         try {
             var sOpt = surveyRepository.findById(id);
             if (sOpt.isEmpty()) return "redirect:/";
             Survey s = sOpt.get();
             List<Response> responses = responseRepository.findBySurvey(s);
+
+            // Only allow coordinators to view results
+            Object uid = session.getAttribute("userId");
+            if (!(uid instanceof Long)) {
+                return "redirect:/";
+            }
+            var uOpt = userRepository.findById((Long) uid);
+            if (uOpt.isEmpty() || uOpt.get().getRole() != surveyapp.model.UserRole.COORDINATOR) {
+                return "redirect:/";
+            }
 
             // Map questionId -> optionId -> count
             Map<Long, Map<Long, Integer>> counts = new HashMap<>();
@@ -100,13 +115,13 @@ public class ResultsController {
                     String color;
                     // If this option has the maximum count, mark it green (also covers ties)
                     if (v == max && max > 0) {
-                        color = toRgba(0,128,0,0.14);
+                        color = toRgba(0,128,0,0.28);
                     } else if (v == min && max != min) {
                         // least chosen -> light red
-                        color = toRgba(255,120,120,0.12);
+                        color = toRgba(255,120,120,0.24);
                     } else if (max == min) {
                         // all equal (including zero) -> neutral subtle background
-                        color = toRgba(200,200,200,0.06);
+                        color = toRgba(200,200,200,0.10);
                     } else {
                         double ratio = (double)(v - min) / (double)(max - min);
                         color = colorForRatio(ratio);

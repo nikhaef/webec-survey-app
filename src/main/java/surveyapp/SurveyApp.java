@@ -10,10 +10,10 @@ import surveyapp.model.UserRole;
 import surveyapp.repository.UserRepository;
 
 @SpringBootApplication
-public class SurveyAppApplication {
+public class SurveyApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(SurveyAppApplication.class, args);
+        SpringApplication.run(SurveyApp.class, args);
     }
 
     // create a default coordinator for convenience

@@ -97,7 +97,9 @@ public class RespondentController {
         }
 
         responseRepository.save(resp);
-        return "redirect:/survey/" + id + "/results";
+        // set a short flash message and redirect to home (results are only visible to coordinators)
+        session.setAttribute("flash", "Antwort übermittelt");
+        return "redirect:/";
     }
 }
 

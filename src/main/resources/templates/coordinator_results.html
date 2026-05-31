@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Resultate</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Resultate</h1>
+        <div class="nav">
+            <a class="btn" th:href="@{/}">Zurück</a>
+        </div>
+    </div>
+
+    <div th:if="${closedSurveys == null or #lists.isEmpty(closedSurveys)}">Keine geschlossenen Umfragen vorhanden.</div>
+    <div class="survey-list">
+        <div class="survey-card" th:each="s : ${closedSurveys}">
+            <h3 th:text="${s.title}"></h3>
+            <p th:text="${#lists.size(s.questions)} + ' Fragen'"></p>
+            <a th:href="@{'/survey/' + ${s.id} + '/results'}" class="btn">Ergebnisse anzeigen</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+

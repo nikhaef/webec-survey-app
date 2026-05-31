@@ -21,8 +21,13 @@
             <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
                 <a class="btn wide" th:href="@{/coordinator/create}">Umfrage erstellen</a>
             </span>
+            <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
+                <a class="btn" th:href="@{/coordinator/results}">Resultate</a>
+            </span>
         </div>
     </div>
+
+    <div th:if="${flash != null}" style="margin-bottom:12px; padding:10px; background:#e6ffed; border:1px solid #c5f0cc; color:#105018">[[${flash}]]</div>
 
     <h2>Offene Umfragen</h2>
     <div class="survey-list">
@@ -38,10 +43,12 @@
 
     <h2>Geschlossene Umfragen</h2>
     <div class="survey-list">
-        <div class="survey-card" th:each="s : ${closedSurveys}">
+            <div class="survey-card" th:each="s : ${closedSurveys}">
             <h3 th:text="${s.title}"></h3>
             <p th:text="${#lists.size(s.questions)} + ' Fragen'"></p>
-            <a th:href="@{'/survey/' + ${s.id} + '/results'}" class="btn">Ergebnisse</a>
+                <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
+                    <a th:href="@{'/survey/' + ${s.id} + '/results'}" class="btn">Ergebnisse</a>
+                </span>
             <span th:if="${currentUser != null and currentUser.role.name() == 'COORDINATOR'}">
                 <a th:href="@{'/coordinator/open/' + ${s.id}}" class="btn">Öffnen</a>
             </span>

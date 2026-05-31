@@ -25,5 +25,15 @@ public class GlobalControllerAdvice {
         }
         return null;
     }
+
+    @ModelAttribute("flash")
+    public String flashMessage(HttpSession session) {
+        Object m = session.getAttribute("flash");
+        if (m instanceof String) {
+            session.removeAttribute("flash");
+            return (String) m;
+        }
+        return null;
+    }
 }
 
